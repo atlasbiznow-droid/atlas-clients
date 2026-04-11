@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas Biz Now Client List & Projects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-light: #E1DFDB;
+            --bg-dark: #212121;
+            --text-dark: #303033;
+            --text-light: #ffffff;
+            --accent: #BBB7AF;
+            --gold: #C9A227;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Open Sans', 'Roboto', sans-serif;
+            color: var(--text-light);
+            background-color: var(--bg-dark);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Video Background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .video-background video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            object-fit: contain;
+        }
+
+        .video-background::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(33, 33, 33, 0.4);
+            z-index: 2;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.8), 0 0 30px rgba(201, 162, 39, 0.3);
+        }
+
+        .header .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            color: var(--bg-light);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        /* Content Sections */
+        .content-section {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            padding: 40px;
+            background: transparent;
+            backdrop-filter: blur(2px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .content-section p {
+            margin-bottom: 18px;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: var(--bg-light);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .content-section p:last-child {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 1.15rem;
+            text-align: center;
+        }
+
+        .quote-section {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin: 30px 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .quote-section span {
+            display: block;
+            font-style: normal;
+            font-size: 1rem;
+            color: var(--accent);
+            margin-top: 10px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        /* Clients Section */
+        .clients-section {
+            text-align: center;
+            background: transparent;
+        }
+
+        .clients-section h2 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .clients-section .instruction {
+            color: var(--bg-light);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .clients-section .instruction strong {
+            color: var(--gold);
+        }
+
+        .client-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .client-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 30px;
+            width: 280px;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+        }
+
+        .client-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .client-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            background: transparent;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .client-card h3 {
+            color: #ffffff;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .client-card p {
+            color: var(--bg-light);
+            font-size: 0.85rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+
+        /* Future Section */
+        .future-section {
+            text-align: center;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .future-section h2 {
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .future-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .future-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .future-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .future-icon {
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .future-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--bg-dark);
+        }
+
+        .future-card p {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            text-align: center;
+            background: transparent;
+        }
+
+        .contact-section h2 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .contact-section .cta {
+            font-size: 1.4rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            font-weight: 600;
+        }
+
+        .contact-grid {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .contact-item h4 {
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .contact-item p, .contact-item a {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-item a:hover {
+            color: var(--gold);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: var(--gold);
+            color: var(--bg-dark);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(201, 162, 39, 0.4);
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .social-links a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .header .subtitle { font-size: 1.1rem; }
+            .content-section { padding: 25px 20px; }
+            .client-logos { gap: 15px; }
+            .client-card { width: 150px; padding: 15px; }
+            .contact-grid { gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay loop muted playsinline>
+            <source src="ABN Hub 3d .mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Atlas Biz Now Client List & Projects</h1>
+            <p class="subtitle">Examples of Branding We Can Do For Your Business</p>
+        </header>
+
+        <!-- Call Button -->
+        <div style="display:flex; justify-content:center; width:100%; margin-bottom:30px;">
+          <a href="tel:+19525928527" style="
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:12px 26px;
+            border:2px solid #ff7a00;
+            border-radius:999px;
+            color:#ff7a00;
+            font-weight:700;
+            font-size:16px;
+            text-decoration:none;
+            font-family:Arial, Helvetica, sans-serif;
+            background:#ffffff;
+          ">
+            📞 Call Us Today !!!
+          </a>
+        </div>
+
+        <!-- Intro Section -->
+        <section class="content-section">
+            <p>Atlas Biz Now creates logos, original designs, creative planning, business branding & more to help your business stand out against the other guys.</p>
+            <p>Logo branding your business is vital to stand out in a world of competitors.</p>
+            <p>We create your Business Logo, Original Business Card Design, Printing & more.</p>
+            <p>We manage your original business Domain name and Web Hosting.</p>
+            <p>Atlas Biz Now will Design your professional business Web Site.</p>
+            <p>Represent Your Business with Pride!!!</p>
+            <div class="quote-section">
+                "I Decided to make a Decision, and Chose to Choose The Most High Ahaya."
+                <span>— Angel</span>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="content-section clients-section">
+            <h2>Projects Done By Atlas Biz Now</h2>
+            <p class="instruction">These are links to real businesses in operation !!!</p>
+            <p class="instruction"><strong>Tap Each Logo To Learn Who They Are and What They Do !!!</strong></p>
+            
+            <div class="client-logos">
+                <a href="https://sites.google.com/site/atlasbiznow/ABN-Sales-Letter/iFixIt-Pro-Handyman-Services" target="_blank" class="client-card">
+                    <img src="iFixIt Pro handyman services logo.png" alt="iFixIt Pro">
+                    <h3>iFixIt Pro</h3>
+                    <p>Handyman Services</p>
+                </a>
+                <a href="https://www.rqconcrete.com" target="_blank" class="client-card">
+                    <img src="RealRQLogo 1.png" alt="RQ Concrete">
+                    <h3>RQ Concrete</h3>
+                    <p>Construction</p>
+                </a>
+                <a href="https://www.facebook.com/smellsgoodtastebetter/" target="_blank" class="client-card">
+                    <img src="ExoticQue.png" alt="Exotic Que BBQ">
+                    <h3>Exotic Que BBQ</h3>
+                    <p>Restaurant</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Future Clients -->
+        <section class="content-section future-section">
+            <h2>Your Business Is Next</h2>
+            <div class="future-grid">
+                <div class="future-card">
+                    <div class="future-icon">
+                        <img src="ABN Plaque.png" alt="ABN" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">
+                    </div>
+                    <p>Your Business Is Next</p>
+                </div>
+                <div class="future-card">
+                    <div class="future-icon">
+                        <img src="ABN Plaque.png" alt="ABN" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">
+                    </div>
+                    <p>Your Business Is Next</p>
+                </div>
+                <div class="future-card">
+                    <div class="future-icon">
+                        <img src="ABN Plaque.png" alt="ABN" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">
+                    </div>
+                    <p>Your Business Is Next</p>
+                </div>
+                <div class="future-card">
+                    <div class="future-icon">
+                        <img src="ABN Plaque.png" alt="ABN" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">
+                    </div>
+                    <p>Your Business Is Next</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="content-section contact-section">
+            <h2>Let's Work Together</h2>
+            <p class="cta">CALL or EMAIL US FOR YOUR FREE CONSULTATION</p>
+            
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h4>Phone</h4>
+                    <p>952-59-ATLAS</p>
+                    <p>952-592-8527</p>
+                </div>
+                <div class="contact-item">
+                    <h4>Email</h4>
+                    <a href="mailto:contact@atlasbiznow.com">contact@atlasbiznow.com</a>
+                </div>
+            </div>
+            
+            <a href="mailto:contact@atlasbiznow.com" class="cta-button">Get Started</a>
+            
+            <div class="social-links">
+                <a href="https://www.facebook.com/angel.delerme/" target="_blank">Facebook</a>
+                <a href="https://www.linkedin.com/in/angel-delerme-70b57246/" target="_blank">LinkedIn</a>
+                <a href="https://www.instagram.com/atlasbiznow/" target="_blank">Instagram</a>
+                <a href="https://x.com/AlexangelD" target="_blank">X</a>
+            </div>
+        </section>
+
+        <!-- Call Button -->
+        <div style="display:flex; justify-content:center; width:100%;">
+          <a href="tel:+19525928527" style="
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:12px 26px;
+            border:2px solid #ff7a00;
+            border-radius:999px;
+            color:#ff7a00;
+            font-weight:700;
+            font-size:16px;
+            text-decoration:none;
+            font-family:Arial, Helvetica, sans-serif;
+            background:#ffffff;
+          ">
+            📞 Call Us Today !!!
+          </a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2026 AtlasBizNow LLC. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
